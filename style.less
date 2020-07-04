@@ -1,8 +1,21 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "main-grid next-up-grid";
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "start-button next-up-title"
+    "main-grid next-up-grid";
+}
+
+button#start-button {
+  grid-area: start-button;
+  justify-self: center;
+  height: 40px;
+  width: 135px;
+}
+
+h4#next-up-title {
+  grid-area: next-up-title;
 }
 
 .grid {
