@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the shape of the next tetromino
   function displayShape() {
-    
+
     // Remove any tetromino from the grid
     displaySquares.forEach((square) => {
       square.classList.remove("tetromino");
@@ -309,4 +309,5 @@ document.addEventListener("DOMContentLoaded", () => {
       clearInterval(timerId);
     }
   }
+  
 });
