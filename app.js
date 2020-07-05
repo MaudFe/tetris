@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   // The Basics
   const numberOfRows = 20;
   const numberOfColumns = 10;
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.querySelector("#start-button");
   const gameBtn = document.querySelector("#new-game-button");
   const scoreDisplay = document.querySelector("#score-display");
-  const linesDisplay = document.querySelector('.lines-display')
+  const linesDisplay = document.querySelector(".lines-display");
   const width = 10;
   let currentIndex = 0;
   let currentRotation = 0;
@@ -29,13 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   // To toggle the navbar containing the rules of Teztris.
-  $(".navbar-toggler").click(function(){
+  $(".navbar-toggler").click(function () {
     $("#rulesToggleNavbar").toggle();
   });
 
   // We need to create the board ourselves properly (not typing 200 divs in html)
   function getBoard() {
-
     // Creating the main board
     let board = document.querySelector(".grid");
     for (let i = 0; i < boardSize; i++) {
@@ -51,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Creating the Up Next Grid
-    let upNextGrid = document.querySelector(".next-up-grid")
+    let upNextGrid = document.querySelector(".next-up-grid");
     for (let i = 0; i < 24; i++) {
       let gridUnit = document.createElement("div");
       upNextGrid.appendChild(gridUnit);
@@ -85,15 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
   ]; // OK
 
   const jTetro = [
-    [1, width + 1, width * 2 + 1, width * 2], 
-    [width, width * 2, width * 2 + 1, width * 2 + 2], 
-    [1, width + 1, width * 2 + 1, 2], 
-    [width, width + 1, width + 2, width * 2 + 2], 
-  ]; //OK 
+    [1, width + 1, width * 2 + 1, width * 2],
+    [width, width * 2, width * 2 + 1, width * 2 + 2],
+    [1, width + 1, width * 2 + 1, 2],
+    [width, width + 1, width + 2, width * 2 + 2],
+  ]; //OK
 
   const lTetro = [
-    [1, width + 1, width * 2 + 1, width*2+2],
-    [width+2, width*2, width*2+1, width * 2 + 2],
+    [1, width + 1, width * 2 + 1, width * 2 + 2],
+    [width + 2, width * 2, width * 2 + 1, width * 2 + 2],
     [0, 1, width + 1, width * 2 + 1],
     [width, width + 1, width + 2, width * 2],
   ]; // OK
@@ -113,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ]; // OK
 
   const tTetro = [
-    [width, width + 1, width + 2, width * 2+1],
+    [width, width + 1, width + 2, width * 2 + 1],
     [1, width, width + 1, width * 2 + 1],
     [1, width, width + 1, width + 2],
     [1, width + 1, width + 2, width * 2 + 1],
@@ -150,29 +148,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   // Making the buttons work
   startBtn.addEventListener("click", () => {
     if (timerId) {
       clearInterval(timerId);
       timerId = null;
       fStop();
+
     } else {
       fStart();
       draw();
       timerId = setInterval(moveDown, 1000);
       nextRandom = Math.floor(Math.random() * tetrominoes.length);
-      displayShape();
+      displayShape(nextRandom);
     }
   });
-
-  gameBtn.addEventListener('click', () => {
-    fReset();
-    undraw();
-    clearInterval(timerId);
-    timerId = null;
-    displaySquares = ""
-  } )
 
   // Move Down function
   function moveDown() {
@@ -216,7 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (
-      current.some((index) => squares[currentPosition + index].classList.contains("block"))) {
+      current.some((index) =>
+        squares[currentPosition + index].classList.contains("block")
+      )
+    ) {
       currentPosition -= 1;
     }
 
@@ -225,8 +218,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Freeze the tetromino when it reaches a bottom wall
   function freeze() {
-    if ( // If tatromino has settled
-      current.some(index => squares[currentPosition + index + width].classList.contains('block'))
+    if (
+      // If tetromino has settled
+      current.some((index) =>
+        squares[currentPosition + index + width].classList.contains("block")
+      )
     ) {
       current.forEach((index) =>
         squares[currentPosition + index].classList.add("block")
@@ -236,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
       current = tetrominoes[random][currentRotation];
       currentPosition = 4;
       draw();
-      displayShape();
+      displayShape(nextRandom);
       addScore();
       gameOver();
     }
@@ -245,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Rotate the tetromino
   function rotation() {
     undraw();
-    currentRotation ++;
+    currentRotation++;
     if (currentRotation === current.length) {
       // If the current rotation gets to 4; goes to the first one
       currentRotation = 0;
@@ -263,16 +259,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextTetro = [
     [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1], // iTetro
     [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 2], // jTetro
-    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth*2+2], //lTetro
-    [0, 1, displayWidth, displayWidth + 1] // oTetro
-    [0, displayWidth, displayWidth + 1, displayWidth * 2 + 1], // sTetro
-    [displayWidth, displayWidth + 1, displayWidth + 2, displayWidth * 2+1], // tTetro
-    [displayWidth, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 2 + 2], // zTetro
+    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 2 + 2], //lTetro
+    [0, 1, displayWidth, displayWidth + 1][ // oTetro
+      (0, displayWidth, displayWidth + 1, displayWidth * 2 + 1)
+    ], // sTetro
+    [displayWidth, displayWidth + 1, displayWidth + 2, displayWidth * 2 + 1], // tTetro
+    [
+      displayWidth,
+      displayWidth + 1,
+      displayWidth * 2 + 1,
+      displayWidth * 2 + 2,
+    ], // zTetro
   ];
 
   // Display the shape of the next tetromino
-  function displayShape() {
-
+  function displayShape(nextRandom) {
     // Remove any tetromino from the grid
     displaySquares.forEach((square) => {
       square.classList.remove("tetromino");
@@ -304,15 +305,14 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex + 9,
       ];
 
-      if (
-        row.every((index) => squares[index].classList.contains("block"))
-      ) {
+      if (row.every((index) => squares[index].classList.contains("block"))) {
         score += 10;
         lines += 1;
         scoreDisplay.innerHTML = score;
         linesDisplay.innerHTML = lines;
         row.forEach((index) => {
-          squares[index].classList.remove("block") || squares[index].classList.remove("tetromino");
+          squares[index].classList.remove("block") ||
+            squares[index].classList.remove("tetromino");
           squares[index].style.backgroundColor = "";
         });
         const squaresRemoved = squares.splice(currentIndex, width);
@@ -331,62 +331,60 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       scoreDisplay.innerHTML = "Game Over ...";
       clearInterval(timerId);
+      fStop();
     }
   }
 
-  let setTm=0;
-  let tmStart=0;
-  let tmNow=0;
-  let tmInterv=0;
+  gameBtn.addEventListener("click", () => {
+    location.reload();
+  });
+
+  let setTm = 0;
+  let tmStart = 0;
+  let tmNow = 0;
+  let tmInterv = 0;
   let tTime = [];
   var nTime = 0;
-  function affTime(tm){ //affichage du compteur
-    var vMin=tm.getMinutes();
-    var vSec=tm.getSeconds();
-    var vMil=Math.round((tm.getMilliseconds())/10); //arrondi au centième
-    if (vMin<10){
-        vMin="0"+vMin;
+  function affTime(tm) {
+    //affichage du compteur
+    var vMin = tm.getMinutes();
+    var vSec = tm.getSeconds();
+    var vMil = Math.round(tm.getMilliseconds() / 10); //arrondi au centième
+    if (vMin < 10) {
+      vMin = "0" + vMin;
     }
-    if (vSec<10){
-        vSec="0"+vSec;
+    if (vSec < 10) {
+      vSec = "0" + vSec;
     }
-    if (vMil<10){
-        vMil="0"+vMil;
+    if (vMil < 10) {
+      vMil = "0" + vMil;
     }
-    document.getElementById("chrono").innerHTML=vMin+"min "+vSec+"sec "+vMil;
+    document.getElementById("chrono").innerHTML =
+      vMin + "min " + vSec + "sec " + vMil;
   }
 
-  function fChrono(){
-    tmNow=new Date();
-    Interv=tmNow-tmStart;
-    tmInterv=new Date(Interv);
+  function fChrono() {
+    tmNow = new Date();
+    Interv = tmNow - tmStart;
+    tmInterv = new Date(Interv);
     affTime(tmInterv);
   }
 
-  function fStart(){
+  function fStart() {
     fStop();
-    if (tmInterv==0) {
-        tmStart=new Date();
-    } else { //si on repart après un clic sur Stop
-        tmNow=new Date();
-        Pause=tmNow-tmInterv;
-        tmStart=new Date(Pause);
+    if (tmInterv == 0) {
+      tmStart = new Date();
+    } else {
+      //si on repart après un clic sur Stop
+      tmNow = new Date();
+      Pause = tmNow - tmInterv;
+      tmStart = new Date(Pause);
     }
-    setTm=setInterval(fChrono,10); //lancement du chrono tous les centièmes de secondes
+    setTm = setInterval(fChrono, 10); //lancement du chrono tous les centièmes de secondes
   }
 
-  function fStop(){
+  function fStop() {
     clearInterval(setTm);
-    tTime[nTime]=tmInterv;
+    tTime[nTime] = tmInterv;
   }
-  
-  function fReset(){ //on efface tout
-    fStop();
-    tmStart=0;
-    tmInterv=0;
-    tTime=[];
-    nTime=0;
-    document.getElementById("chrono").innerHTML="00min 00sec 00";
-  }
-  
 });
