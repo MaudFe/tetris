@@ -1,253 +1,63 @@
 <!DOCTYPE html>
+
 <html lang="en" dir="ltr">
+
   <head>
     <meta charset="utf-8">
+    <title>Let's Play Tetris!</title>
     <script src="app.js" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css"></link>
-    <title>Basic Tetris with JavaScript</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"> 
   </head>
 
   <body>
-    <h1>Welcome to Tetris World!</h1>
-    <h3>Your Score :
-      <span id="score">0</span>
-    </h3>
-    <div class="container">
-      <button type="button" class="btn btn-primary" id="start-button">Start / Pause</button>
-      <div class="grid">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-        <div class="bottom-wall"></div>
-      </div>
-
-      <h4 id="next-up-title">Next Up</h4> 
-      <div class="next-up-grid">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+    <div class="toggle-rules pos-f-t">
+      <nav class="navbar navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#rulesToggleNavbar" aria-controls="rulesToggleNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </nav>
+      <div class="collapse bg-dark p-4" id="rulesToggleNavbar">
+        <h4>Tetris Rules</h4>
+        <p class="fw-200 rules">How to play Tetris : </p>
+        <p class="rules-paragraph">
+          To rotate your tetromino, use the &#8593; or Z key; to move left, use &#8592; 
+          or Q and to move right, use &#8594; or D. <br>
+          To move down, use the &#8595; or S key.
+        </p>
+        <p class="rules-end">
+          Have fun!
+        </p>
       </div>
     </div>
 
+    <header>
+      <h1 class="fw-300">Welcome to<br>
+        <span class="fw-800 text-uppercase text-wide text-big">
+          Tetris World!
+        </span>
+      </h1>
+    </header>
+    <h3 id="chrono">00min 00sec 00</h3>
+    <button type="button" class="btn btn-secondary" id="new-game-button">New Game</button>
+    <main class="game-container">
+      <div class="grid"></div>
 
+      <button type="button" class="btn btn-danger" id="start-button">Start / Pause</button>
+
+      <section>
+        <h1 class="score-title fw-600 text-uppercase">Your Score <br>
+          <span id="score-display text-uppercase fw-300">0</span>
+        </h1>
+        <h2 class="next-up-title text-uppercase fw-400">Next Up</h2> 
+        <div class="next-up-grid"></div>
+        <h2 class="lines-title fw-400 text-uppercase">Lines left<br>
+          <span class="lines-display">0</span>
+        </h2>
+      </section>
+    </main>
   </body>
 </html>

@@ -1,14 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // The Basics
-  const grid = document.querySelector(".grid");
-  let squares = Array.from(document.querySelectorAll(".grid div"));
-  const scoreDisplay = document.querySelector("#score");
+  const numberOfRows = 20;
+  const numberOfColumns = 10;
+  const boardSize = numberOfRows * numberOfColumns;
+
+  const board = getBoard();
+  let squares = Array.from(board.querySelectorAll("div"));
   const startBtn = document.querySelector("#start-button");
+  const gameBtn = document.querySelector("#new-game-button");
+  const scoreDisplay = document.querySelector("#score-display");
+  const linesDisplay = document.querySelector('.lines-display')
   const width = 10;
+  let currentIndex = 0;
+  let currentRotation = 0;
   let nextRandom = 0;
   let timerId;
   let score = 0;
+  let lines = 0;
   const colors = [
     "deepskyblue",
     "navy",
@@ -19,7 +28,55 @@ document.addEventListener("DOMContentLoaded", () => {
     "red",
   ];
 
-  // The Tetrominoes
+  // To toggle the navbar containing the rules of Teztris.
+  $(".navbar-toggler").click(function(){
+    $("#rulesToggleNavbar").toggle();
+  });
+
+  // We need to create the board ourselves properly (not typing 200 divs in html)
+  function getBoard() {
+
+    // Creating the main board
+    let board = document.querySelector(".grid");
+    for (let i = 0; i < boardSize; i++) {
+      let boardUnit = document.createElement("div");
+      board.appendChild(boardUnit);
+    }
+
+    // Setting the base of the board
+    for (let i = 0; i < numberOfColumns; i++) {
+      let boardUnit = document.createElement("div");
+      boardUnit.setAttribute("class", "block");
+      board.appendChild(boardUnit);
+    }
+
+    // Creating the Up Next Grid
+    let upNextGrid = document.querySelector(".next-up-grid")
+    for (let i = 0; i < 24; i++) {
+      let gridUnit = document.createElement("div");
+      upNextGrid.appendChild(gridUnit);
+    }
+
+    return board;
+  }
+
+  // Assign functions to keyCodes
+  function control(event) {
+    if (event.keyCode === 37 || event.keyCode === 81) {
+      moveLeft();
+    } else if (event.keyCode === 38 || event.keyCode === 90) {
+      rotation();
+    } else if (event.keyCode === 39 || event.keyCode === 68) {
+      moveRight();
+    } else if (event.keyCode === 40 || event.keyCode === 83) {
+      moveDown();
+    }
+  }
+
+  // Speeding up the tetromino moving down when the down-associated key is pressed
+  document.addEventListener("keydown", control);
+
+  // The Tetrominoes from the original game
   const iTetro = [
     [1, width + 1, width * 2 + 1, width * 3 + 1],
     [width, width + 1, width + 2, width + 3],
@@ -39,44 +96,43 @@ document.addEventListener("DOMContentLoaded", () => {
     [width+2, width*2, width*2+1, width * 2 + 2],
     [0, 1, width + 1, width * 2 + 1],
     [width, width + 1, width + 2, width * 2],
-  ];
+  ]; // OK
 
   const oTetro = [
     [0, 1, width, width + 1],
     [0, 1, width, width + 1],
     [0, 1, width, width + 1],
     [0, 1, width, width + 1],
-  ];
+  ]; // OK
 
   const sTetro = [
     [0, width, width + 1, width * 2 + 1],
     [width + 1, width + 2, width * 2, width * 2 + 1],
     [0, width, width + 1, width * 2 + 1],
     [width + 1, width + 2, width * 2, width * 2 + 1],
-  ];
+  ]; // OK
 
   const tTetro = [
     [width, width + 1, width + 2, width * 2+1],
     [1, width, width + 1, width * 2 + 1],
     [1, width, width + 1, width + 2],
     [1, width + 1, width + 2, width * 2 + 1],
-  ];
+  ]; // OK
 
   const zTetro = [
     [width, width + 1, width * 2 + 1, width * 2 + 2],
     [1, width, width + 1, width * 2],
     [width, width + 1, width * 2 + 1, width * 2 + 2],
     [1, width, width + 1, width * 2],
-  ];
+  ]; // OK
 
   const tetrominoes = [iTetro, jTetro, lTetro, oTetro, sTetro, tTetro, zTetro];
-
-  let currentPosition = 4;
-  let currentRotation = 0;
 
   // Select a Tetromino and its first rotation randomly
   let random = Math.floor(Math.random() * tetrominoes.length); // Math.floor round a number to its closest int
   let current = tetrominoes[random][currentRotation];
+
+  let currentPosition = 4;
 
   // Draw a tetromino
   function draw() {
@@ -94,49 +150,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Assign functions to keyCodes
-  function control(e) {
-    if (e.keyCode === 37 || e.keyCode === 81) {
-      moveLeft();
-    } else if (e.keyCode === 38 || e.keyCode === 90) {
-      rotation();
-    } else if (e.keyCode === 39 || e.keyCode === 68) {
-      moveRight();
-    } else if (e.keyCode === 40 || e.keyCode === 83) {
-      moveDown();
+
+  // Making the buttons work
+  startBtn.addEventListener("click", () => {
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+      fStop();
+    } else {
+      fStart();
+      draw();
+      timerId = setInterval(moveDown, 1000);
+      nextRandom = Math.floor(Math.random() * tetrominoes.length);
+      displayShape();
     }
-  }
-  document.addEventListener("keyup", control);
+  });
+
+  gameBtn.addEventListener('click', () => {
+    fReset();
+    undraw();
+    clearInterval(timerId);
+    timerId = null;
+    displaySquares = ""
+  } )
 
   // Move Down function
   function moveDown() {
     undraw();
-    currentPosition += width;
+    currentPosition = currentPosition += width;
     draw();
     freeze();
-  }
-
-  // Freeze the tetromino when it reaches a bottom wall
-  function freeze() {
-    if (
-      current.some((index) =>
-        squares[currentPosition + index + width].classList.contains(
-          "bottom-wall"
-        )
-      )
-    ) {
-      current.forEach((index) =>
-        squares[currentPosition + index].classList.add("bottom-wall")
-      );
-      random = nextRandom;
-      nextRandom = Math.floor(Math.random() * tetrominoes.length);
-      current = tetrominoes[random][currentRotation];
-      currentPosition = 4;
-      draw();
-      displayShape();
-      addScore();
-      gameOver();
-    }
   }
 
   // Move the tetromino left, unless there is an edge or a blockage
@@ -152,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (
       current.some((index) =>
-        squares[currentPosition + index].classList.contains("bottom-wall")
+        squares[currentPosition + index].classList.contains("block")
       )
     ) {
       currentPosition += 1;
@@ -173,35 +216,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (
-      current.some((index) => squares[currentPosition + index].classList.contains("bottom-wall"))) {
+      current.some((index) => squares[currentPosition + index].classList.contains("block"))) {
       currentPosition -= 1;
     }
 
     draw();
   }
 
-   ///FIX ROTATION OF TETROMINOS A THE EDGE 
-   function isAtRight() {
-    return current.some(index=> (currentPosition + index + 1) % width === 0)  
-  }
-  
-  function isAtLeft() {
-    return current.some(index=> (currentPosition + index) % width === 0)
-  }
-  
-  function checkRotatedPosition(P){
-    P = P || currentPosition;       //get current position.  Then, check if the piece is near the left side.
-    if ((P+1) % width < 4) {         //add 1 because the position index can be 1 less than where the piece is (with how they are indexed).     
-      if (isAtRight()){            //use actual position to check if it's flipped over to right side
-        currentPosition += 1;    //if so, add one to wrap it back around
-        checkRotatedPosition(P); //check again.  Pass position from start, since long block might need to move more.
-        }
-    }
-    else if (P % width > 5) {
-      if (isAtLeft()){
-        currentPosition -= 1;
-      checkRotatedPosition(P);
-      }
+  // Freeze the tetromino when it reaches a bottom wall
+  function freeze() {
+    if ( // If tatromino has settled
+      current.some(index => squares[currentPosition + index + width].classList.contains('block'))
+    ) {
+      current.forEach((index) =>
+        squares[currentPosition + index].classList.add("block")
+      );
+      random = nextRandom;
+      nextRandom = Math.floor(Math.random() * tetrominoes.length);
+      current = tetrominoes[random][currentRotation];
+      currentPosition = 4;
+      draw();
+      displayShape();
+      addScore();
+      gameOver();
     }
   }
 
@@ -214,7 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
       currentRotation = 0;
     }
     current = tetrominoes[random][currentRotation];
-    checkRotatedPosition();
     draw();
   }
 
@@ -250,50 +286,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Making the buttons work
-  startBtn.addEventListener("click", () => {
-    if (timerId) {
-      clearInterval(timerId);
-      timerId = null;
-    } else {
-      draw();
-      timerId = setInterval(moveDown, 1000);
-      nextRandom = Math.floor(Math.random() * tetrominoes.length);
-      displayShape();
-    }
-  });
-
   // Add score
   function addScore() {
-    for (let i = 0; i < 199; i += width) {
+    for (currentIndex = 0; currentIndex < boardSize; currentIndex += width) {
       const row = [
-        i,
-        i + 1,
-        i + 2,
-        i + 3,
-        i + 4,
-        i + 5,
-        i + 6,
-        i + 7,
-        i + 6,
-        i + 7,
-        i + 8,
-        i + 9,
+        currentIndex,
+        currentIndex + 1,
+        currentIndex + 2,
+        currentIndex + 3,
+        currentIndex + 4,
+        currentIndex + 5,
+        currentIndex + 6,
+        currentIndex + 7,
+        currentIndex + 6,
+        currentIndex + 7,
+        currentIndex + 8,
+        currentIndex + 9,
       ];
 
       if (
-        row.every((index) => squares[index].classList.contains("bottom-wall"))
+        row.every((index) => squares[index].classList.contains("block"))
       ) {
         score += 10;
+        lines += 1;
         scoreDisplay.innerHTML = score;
+        linesDisplay.innerHTML = lines;
         row.forEach((index) => {
-          squares[index].classList.remove("bottom-wall");
-          squares[index].classList.remove("tetromino");
+          squares[index].classList.remove("block") || squares[index].classList.remove("tetromino");
           squares[index].style.backgroundColor = "";
         });
-        const squaresRemoved = squares.splice(i, width);
+        const squaresRemoved = squares.splice(currentIndex, width);
         squares = squaresRemoved.concat(squares);
-        squares.forEach((cell) => grid.appendChild(cell));
+        squares.forEach((cell) => board.appendChild(cell));
       }
     }
   }
@@ -302,12 +326,67 @@ document.addEventListener("DOMContentLoaded", () => {
   function gameOver() {
     if (
       current.some((index) =>
-        squares[currentPosition + index].classList.contains("bottom-wall")
+        squares[currentPosition + index].classList.contains("block")
       )
     ) {
       scoreDisplay.innerHTML = "Game Over ...";
       clearInterval(timerId);
     }
+  }
+
+  let setTm=0;
+  let tmStart=0;
+  let tmNow=0;
+  let tmInterv=0;
+  let tTime = [];
+  var nTime = 0;
+  function affTime(tm){ //affichage du compteur
+    var vMin=tm.getMinutes();
+    var vSec=tm.getSeconds();
+    var vMil=Math.round((tm.getMilliseconds())/10); //arrondi au centième
+    if (vMin<10){
+        vMin="0"+vMin;
+    }
+    if (vSec<10){
+        vSec="0"+vSec;
+    }
+    if (vMil<10){
+        vMil="0"+vMil;
+    }
+    document.getElementById("chrono").innerHTML=vMin+"min "+vSec+"sec "+vMil;
+  }
+
+  function fChrono(){
+    tmNow=new Date();
+    Interv=tmNow-tmStart;
+    tmInterv=new Date(Interv);
+    affTime(tmInterv);
+  }
+
+  function fStart(){
+    fStop();
+    if (tmInterv==0) {
+        tmStart=new Date();
+    } else { //si on repart après un clic sur Stop
+        tmNow=new Date();
+        Pause=tmNow-tmInterv;
+        tmStart=new Date(Pause);
+    }
+    setTm=setInterval(fChrono,10); //lancement du chrono tous les centièmes de secondes
+  }
+
+  function fStop(){
+    clearInterval(setTm);
+    tTime[nTime]=tmInterv;
+  }
+  
+  function fReset(){ //on efface tout
+    fStop();
+    tmStart=0;
+    tmInterv=0;
+    tTime=[];
+    nTime=0;
+    document.getElementById("chrono").innerHTML="00min 00sec 00";
   }
   
 });
