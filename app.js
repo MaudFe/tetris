@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   // The Basics
-  const numberOfRows = 20;
-  const numberOfColumns = 10;
-  const boardSize = numberOfRows * numberOfColumns;
+  const rows = 20;
+  const columns = 10;
+  const boardSize = rows * columns;
 
   const board = getBoard();
   let squares = Array.from(board.querySelectorAll("div"));
@@ -18,23 +18,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let score = 0;
   let lines = 0;
   const colors = [
-    "deepskyblue",
-    "navy",
-    "orange",
-    "yellow",
-    "yellowgreen",
-    "darkviolet",
-    "red",
+    "url(images/blue_block.png)",
+    "url(images/navy_block.png)",
+    "url(images/pink_block.png)",
+    "url(images/yellow_block.png)",
+    "url(images/green_block.png)",
+    "url(images/purple_block.png)",
+    "url(images/peach_block.png)",
   ];
 
-  // To toggle the navbar containing the rules of Teztris.
+  // To toggle the navbar containing the rules of Tetris.
   $(".navbar-toggler").click(function () {
     $("#rulesToggleNavbar").toggle();
   });
 
   // We need to create the board ourselves properly (not typing 200 divs in html)
   function getBoard() {
-    // Creating the main board
+    // Creating the board
     let board = document.querySelector(".grid");
     for (let i = 0; i < boardSize; i++) {
       let boardUnit = document.createElement("div");
@@ -42,15 +42,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Setting the base of the board
-    for (let i = 0; i < numberOfColumns; i++) {
+    for (let i = 0; i < columns; i++) {
       let boardUnit = document.createElement("div");
-      boardUnit.setAttribute("class", "block");
+      boardUnit.setAttribute("class", "block3");
       board.appendChild(boardUnit);
     }
 
     // Creating the Up Next Grid
     let upNextGrid = document.querySelector(".next-up-grid");
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 16; i++) {
       let gridUnit = document.createElement("div");
       upNextGrid.appendChild(gridUnit);
     }
@@ -76,52 +76,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // The Tetrominoes from the original game
   const iTetro = [
-    [1, width + 1, width * 2 + 1, width * 3 + 1],
-    [width, width + 1, width + 2, width + 3],
-    [1, width + 1, width * 2 + 1, width * 3 + 1],
-    [width, width + 1, width + 2, width + 3],
+    [1, rows + 1, rows * 2 + 1, rows * 3 + 1],
+    [rows, rows + 1, rows + 2, rows + 3],
+    [1, rows + 1, rows * 2 + 1, rows * 3 + 1],
+    [rows, rows + 1, rows + 2, rows + 3]
   ]; // OK
 
   const jTetro = [
-    [1, width + 1, width * 2 + 1, width * 2],
-    [width, width * 2, width * 2 + 1, width * 2 + 2],
-    [1, width + 1, width * 2 + 1, 2],
-    [width, width + 1, width + 2, width * 2 + 2],
+    [1, rows + 1, rows * 2 + 1, 2],
+    [rows, rows + 1, rows + 2, rows * 2 + 2],
+    [1, rows + 1, rows * 2 + 1, rows * 2],
+    [rows, rows * 2, rows * 2 + 1, rows * 2 + 2]
   ]; //OK
 
   const lTetro = [
-    [1, width + 1, width * 2 + 1, width * 2 + 2],
-    [width + 2, width * 2, width * 2 + 1, width * 2 + 2],
-    [0, 1, width + 1, width * 2 + 1],
-    [width, width + 1, width + 2, width * 2],
+    [1, rows + 1, rows * 2 + 1, width * 2 + 2],
+    [rows * 2, rows * 2 + 1, rows * 2 + 2, rows + 2],
+    [0, 1, rows + 1, rows * 2 + 1],
+    [rows, rows + 1, rows + 2, rows * 2]
   ]; // OK
 
   const oTetro = [
-    [0, 1, width, width + 1],
-    [0, 1, width, width + 1],
-    [0, 1, width, width + 1],
-    [0, 1, width, width + 1],
+    [0, 1, rows, rows + 1],
+    [0, 1, rows, rows + 1],
+    [0, 1, rows, rows + 1],
+    [0, 1, rows, rows + 1]
   ]; // OK
 
   const sTetro = [
-    [0, width, width + 1, width * 2 + 1],
-    [width + 1, width + 2, width * 2, width * 2 + 1],
-    [0, width, width + 1, width * 2 + 1],
-    [width + 1, width + 2, width * 2, width * 2 + 1],
+    [0, rows, rows + 1, rows * 2 + 1],
+    [rows + 1, rows + 2, rows * 2, rows * 2 + 1],
+    [0, rows, rows + 1, rows * 2 + 1],
+    [rows + 1, rows + 2, rows * 2, rows * 2 + 1]
   ]; // OK
 
   const tTetro = [
-    [width, width + 1, width + 2, width * 2 + 1],
-    [1, width, width + 1, width * 2 + 1],
-    [1, width, width + 1, width + 2],
-    [1, width + 1, width + 2, width * 2 + 1],
+    [1, rows, rows + 1, rows + 2],
+    [1, rows + 1, rows + 2, rows * 2 + 1],
+    [rows, rows + 1, rows + 2, rows * 2 + 1],
+    [1, rows, rows + 1, rows * 2 + 1]
   ]; // OK
 
   const zTetro = [
-    [width, width + 1, width * 2 + 1, width * 2 + 2],
-    [1, width, width + 1, width * 2],
-    [width, width + 1, width * 2 + 1, width * 2 + 2],
-    [1, width, width + 1, width * 2],
+    [1, rows, rows + 1, rows * 2],
+    [rows, rows + 1, rows * 2 + 1, rows * 2 + 2],
+    [1, rows, rows + 1, rows * 2],
+    [rows, rows + 1, rows * 2 + 1, rows * 2 + 2]
   ]; // OK
 
   const tetrominoes = [iTetro, jTetro, lTetro, oTetro, sTetro, tTetro, zTetro];
@@ -135,16 +135,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Draw a tetromino
   function draw() {
     current.forEach((index) => {
-      squares[currentPosition + index].classList.add("tetromino");
-      squares[currentPosition + index].style.backgroundColor = colors[random];
+      squares[currentPosition + index].classList.add("block");
+      squares[currentPosition + index].style.backgroundImage = colors[random];
     });
   }
 
   // Undraw the tetromino
   function undraw() {
     current.forEach((index) => {
-      squares[currentPosition + index].classList.remove("tetromino");
-      squares[currentPosition + index].style.backgroundColor = "";
+      squares[currentPosition + index].classList.remove("block");
+      squares[currentPosition + index].style.backgroundImage = "none";
     });
   }
 
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
       draw();
       timerId = setInterval(moveDown, 1000);
       nextRandom = Math.floor(Math.random() * tetrominoes.length);
-      displayShape(nextRandom);
+      displayShape();
     }
   });
 
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (
       current.some((index) =>
-        squares[currentPosition + index].classList.contains("block")
+        squares[currentPosition + index].classList.contains("block2")
       )
     ) {
       currentPosition += 1;
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (
       current.some((index) =>
-        squares[currentPosition + index].classList.contains("block")
+        squares[currentPosition + index].classList.contains("block2")
       )
     ) {
       currentPosition -= 1;
@@ -221,22 +221,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (
       // If tetromino has settled
       current.some((index) =>
-        squares[currentPosition + index + width].classList.contains("block")
+        squares[currentPosition + index + width].classList.contains("block3") || squares[currentPosition + index + width].classList.contains('block2')
       )
     ) {
       current.forEach((index) =>
-        squares[currentPosition + index].classList.add("block")
+        squares[index + currentPosition].classList.add("block2")
       );
       random = nextRandom;
       nextRandom = Math.floor(Math.random() * tetrominoes.length);
       current = tetrominoes[random][currentRotation];
       currentPosition = 4;
       draw();
-      displayShape(nextRandom);
+      displayShape();
       addScore();
       gameOver();
     }
   }
+  freeze()
 
   // Rotate the tetromino
   function rotation() {
@@ -258,38 +259,32 @@ document.addEventListener("DOMContentLoaded", () => {
   // Array of the tetrominos on their first rotation only
   const nextTetro = [
     [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1], // iTetro
-    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 2], // jTetro
+    [1, displayWidth + 1, displayWidth * 2 + 1, 2], // jTetro
     [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 2 + 2], //lTetro
-    [0, 1, displayWidth, displayWidth + 1][ // oTetro
-      (0, displayWidth, displayWidth + 1, displayWidth * 2 + 1)
-    ], // sTetro
-    [displayWidth, displayWidth + 1, displayWidth + 2, displayWidth * 2 + 1], // tTetro
-    [
-      displayWidth,
-      displayWidth + 1,
-      displayWidth * 2 + 1,
-      displayWidth * 2 + 2,
-    ], // zTetro
+    [0, 1, displayWidth, displayWidth + 1], // oTetro
+    [0, displayWidth, displayIndex + 1, displayIndex * 2 + 1], // sTetro
+    [1, displayIndex, displayIndex + 1, displayIndex + 2], // tTetro
+    [1, displayIndex, displayIndex + 1, displayIndex * 2] // zTetro
   ];
 
   // Display the shape of the next tetromino
-  function displayShape(nextRandom) {
+  function displayShape() {
     // Remove any tetromino from the grid
     displaySquares.forEach((square) => {
       square.classList.remove("tetromino");
-      square.style.backgroundColor = "";
+      square.style.backgroundImage = "none";
     });
 
     nextTetro[nextRandom].forEach((index) => {
-      displaySquares[displayIndex + index].classList.add("tetromino");
-      displaySquares[displayIndex + index].style.backgroundColor =
+      displaySquares[displayIndex + index].classList.add("block");
+      displaySquares[displayIndex + index].style.backgroundImage =
         colors[nextRandom];
     });
   }
 
   // Add score
   function addScore() {
-    for (currentIndex = 0; currentIndex < boardSize; currentIndex += width) {
+    for (currentIndex = 0; currentIndex < boardSize; currentIndex += rows) {
       const row = [
         currentIndex,
         currentIndex + 1,
@@ -305,15 +300,15 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex + 9,
       ];
 
-      if (row.every((index) => squares[index].classList.contains("block"))) {
+      if (row.every((index) => squares[index].classList.contains("block2"))) {
         score += 10;
         lines += 1;
         scoreDisplay.innerHTML = score;
         linesDisplay.innerHTML = lines;
         row.forEach((index) => {
-          squares[index].classList.remove("block") ||
-            squares[index].classList.remove("tetromino");
-          squares[index].style.backgroundColor = "";
+          squares[index].classList.remove("block2") ||
+            squares[index].classList.remove("block");
+          squares[index].style.backgroundImage = "none";
         });
         const squaresRemoved = squares.splice(currentIndex, width);
         squares = squaresRemoved.concat(squares);
@@ -326,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function gameOver() {
     if (
       current.some((index) =>
-        squares[currentPosition + index].classList.contains("block")
+        squares[currentPosition + index].classList.contains("block2")
       )
     ) {
       scoreDisplay.innerHTML = "Game Over ...";
@@ -388,3 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
     tTime[nTime] = tmInterv;
   }
 });
+
+
+
