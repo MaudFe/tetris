@@ -1,3 +1,15 @@
+:root {
+  /* default font size in browsers is 16px = 1em, we make
+     things easier for us and make 10px our base size.
+     We have 10/16 = 0.625 = 1rem as it is set on root element.
+     So 1rem is now 10px throughout our stylesheet.*/
+  font-size: 0.625em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 h1, h2, h3 {
   color: grey;
   font-family: 'Orbitron', sans-serif;
@@ -15,6 +27,7 @@ p {
 
 
 body {
+  background-color: ghostwhite;
   display: grid;
   grid-template-rows: auto 0.2fr 0.2fr auto;
   grid-template-columns: 1fr 1fr;
@@ -166,11 +179,7 @@ h4#next-up-title {
   letter-spacing: 1rem;
 }
 
-body {
-  background-color: ghostwhite;
-}
-
-.block {
+.block1 {
   background-image: url(../images/blue_block.png);
 }
 
