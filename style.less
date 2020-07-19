@@ -1,16 +1,11 @@
-:root {
-  /* default font size in browsers is 16px = 1em, we make
-     things easier for us and make 10px our base size.
-     We have 10/16 = 0.625 = 1rem as it is set on root element.
-     So 1rem is now 10px throughout our stylesheet.*/
-  font-size: 0.625em;
-}
-
-* {
-  box-sizing: border-box;
-}
+/* MAIN DESIGNING FOR TETRIS GAME PAGE */
 
 h1, h2, h3 {
+  color: grey;
+  font-family: 'Orbitron', sans-serif;
+}
+
+span {
   color: grey;
   font-family: 'Orbitron', sans-serif;
 }
@@ -30,12 +25,13 @@ body {
   background-color: ghostwhite;
   display: grid;
   grid-template-rows: auto 0.2fr 0.2fr auto;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-areas: 
-    "toggle-rules toggle-rules"
-    "header header"
-    "chrono-display new-game-button"
-    "main main";
+    "toggle-rules"
+    "header"
+    "chrono-display"
+    "main"
+    "footer-note";
 }
 
 .toggle-rules {
@@ -56,37 +52,43 @@ header {
   padding-bottom: 15px;
 }
 
-#new-game-button {
-  grid-area: new-game-button;
+footer#foot-note {
+  grid-area: footer-note;
   justify-self: center;
-  max-height: 40px;
+  padding-top: 10px;
 }
 
 main {
   grid-area: main;
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto;
   grid-template-columns: 1fr 1fr;
   row-gap: 10px;
   grid-template-areas: 
-    "main-grid main-section"
-    "start-button main-section";
+    "main-grid main-section";
 }
 
-.grid {
+canvas#main-grid {
   grid-area: main-grid;
+  display: block;
   justify-self: center;
-  width: 200px;
-  height: 400px;
-  display: flex;
-  flex-wrap: wrap;
   background-color: #202020;
-  
+  border: 5px solid grey;
 }
 
-.grid div {
-  height: 20px;
-  width: 20px;
+
+section {
+  grid-area: main-section;
+  justify-self: center;
+  display: grid;
+  grid-template-rows: 80px 150px 50px 160px 100px;
+  grid-template-columns: auto;
+  grid-template-areas: 
+    "start-button"
+    "score-title"
+    "next-up-title"
+    "next-up-grid"
+    "lines-left";
 }
 
 button#start-button {
@@ -96,57 +98,35 @@ button#start-button {
   width: 135px;
 }
 
-section {
-  grid-area: main-section;
-  justify-self: center;
-  display: grid;
-  grid-template-rows: auto auto auto auto;
-  grid-template-columns: auto;
-  grid-template-areas: 
-    "score-title"
-    "next-up-title"
-    "next-up-grid"
-    "lines-left";
-}
-
-.score-title {
+h1.score-title {
   grid-area: score-title;
   justify-self: center;
   text-align: center;
 }
 
-h4#next-up-title {
+h2.next-up-title {
   grid-area: next-up-title;
   font-family: 'Orbitron', sans-serif;
-}
-
-.next-up-title {
-  grid-area: next-up-title;
   justify-self: center;
 }
 
-.next-up-grid {
+canvas#up-next-grid {
   grid-area: next-up-grid;
+  display: block;
   justify-self: center;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  flex-wrap: wrap;
+  width: 120px;
+  height: 120px;
   background-color: #202020;
+  border: 5px solid grey;
 }
 
-.next-up-grid div {
-  height: 20px;
-  width: 20px;
-}
-
-.lines-title {
+h2.lines-title {
   grid-area: lines-left;
   justify-self: center;
   text-align: center;
 }
 
-.lines-display {
+#lines-display {
   font-size: x-large;
   font-family: 'Orbitron', sans-serif
 }
@@ -178,35 +158,6 @@ h4#next-up-title {
 .text-wide {
   letter-spacing: 1rem;
 }
-
-.block1 {
-  background-image: url(../images/blue_block.png);
-}
-
-.block2 {
-  background-image: url(../images/navy_block.png);
-}
-
-.block3 {
-  background-image: url(../images/pink_block.png);
-}
-
-.block4 {
-  background-image: url(../images/yellow_block.png);
-}
-
-.block5 {
-  background-image: url(../images/green_block.png);
-}
-
-.block6 {
-  background-image: url(../images/purple_block.png);
-}
-
-.block7 {
-  background-image: url(../images/peach_block.png);
-}
-
 
 
 
