@@ -16,12 +16,16 @@ const WIDTH = 300,
 const block_width = WIDTH / COLS,
   block_height = HEIGHT / ROWS;
 let main_grid = [];
+let upNext_grid = [];
 let game_over;
 let interval;
 let intervalRender;
-let moving = []; // cCurrently moving tetro
+let moving = []; // Currently moving tetro
 let currentX, currentY; // Coordinates of the current tetro
 let settled; // Is the current tetro settled on the grid or not
+let next = [];
+let upNext_canvas = document.getElementById("up-next-grid");
+let upNext_context = upNext_canvas.getContext("2d");
 
 const shapes = [
   [1, 1, 1, 1], // I Shape
@@ -78,6 +82,15 @@ function newGrid() {
     main_grid[y] = [];
     for (let x = 0; x < COLS; x++) {
       main_grid[y][x] = 0;
+    }
+  }
+}
+
+function newUpNext() {
+  for (let y = 0; y < ROWS/4; y++) {
+    upNext_grid[y] = [];
+    for (let x = 0; x < COLS/2; x++) {
+      upNext_grid[y][x] = 0;
     }
   }
 }
@@ -169,7 +182,7 @@ function clear(offsetX, offsetY, newMoving) {
           y + offsetY >= ROWS ||
           x + offsetX >= COLS
         ) {
-          if (offsetY == 1 && settled) {
+          if (offsetY === 1 && settled) {
             game_over = true; // It's finished if the shape hits to top row
             chronoStop();
             alert("Game over...");
@@ -186,15 +199,16 @@ function clear(offsetX, offsetY, newMoving) {
 document.getElementById("start-button").onclick = function(){
   newGame();
   chronoStart();
+  document.addEventListener('keydown', controlShape)
   document.getElementById("start-button").disabled = true;
 };
 
 
 function newGame() {
-  window.onkeydown = controlShape;
   clearAllIntervals();
   intervalRender = setInterval(render, 30);
   newGrid();
+  newUpNext();
   newShape();
   game_over = false;
   interval = setInterval(tick, 600);
@@ -210,6 +224,18 @@ function drawBlock(x, y) {
   main_context.fillRect(block_width * x, block_height * y, block_width - 1, block_height - 1);
   main_context.strokeRect(block_width * x, block_height * y, block_width - 1, block_height - 1);
 }
+
+function drawNext(x, y) {
+  upNext_context.fillRect(block_width * x, block_height * y, block_width - 1, block_height - 1);
+  upNext_context.strokeRect(block_width * x, block_height * y, block_width - 1, block_height - 1);
+}
+
+let invalid = {};
+const upNext_block = 5;
+function invalidateNext() { 
+  invalid.next = true; 
+}
+
 
 // Draw the grid and the moving shape
 function render() {
@@ -234,7 +260,27 @@ function render() {
       }
     }
   }
+
+  console.log("yo")
+  let upNext_display = (upNext_block) / 2; 
+  upNext_context.save();
+  upNext_context.translate(0.5, 0.5);
+  upNext_context.clearRect(0, 0, upNext_display*block_width, upNext_display*block_height);
+  upNext_context.strokeStyle = 'grey';
+  for (let y = 0; y < 4; y++) {
+    for (let x = 0; x < 4; x++) {
+      if (next) {
+        upNext_context.fillStyle = colors[next - 1];
+        drawNext(x, y);
+      }
+    }
+  }
+  upNext_context.strokeRect(0, 0, upNext_display*block_width - 1, upNext_display*block_height - 1);
+  upNext_context.restore();
+  invalid.next = false;
+
 }
+
 
 function controlShape(e) {
   e.preventDefault();
@@ -263,6 +309,7 @@ function controlShape(e) {
   }
   render();
 };
+
 
 /**************************
 * UTILITIES FOR THE TIMER *
